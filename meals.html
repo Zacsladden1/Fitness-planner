@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Planner - Meal Plan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --secondary-color: #3498DB;
+            --accent-color: #E74C3C;
+            --text-color: #2C3E50;
+            --text-light: #7F8C8D;
+            --background-color: #ECF0F1;
+            --card-background: #ffffff;
+            --border-color: #BDC3C7;
+            --success-color: #27AE60;
+            --warning-color: #F1C40F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)),
+                        url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-tab {
+            padding: 1rem 2rem;
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .meal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .meal-card {
+            position: relative;
+            background: var(--card-background);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meal-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .meal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .meal-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .meal-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .meal-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meal-info {
+            flex: 1;
+        }
+
+        .meal-actions {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .meal-info h3 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .meal-info h3 i {
+            color: var(--secondary-color);
+        }
+
+        .meal-info ul {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .meal-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            color: var(--text-color);
+        }
+
+        .meal-info li i {
+            color: var(--success-color);
+            margin-top: 0.3rem;
+        }
+
+        .nutrition-info {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--background-color);
+            border-radius: 15px;
+        }
+
+        .nutrition-info h4 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .nutrition-info h4 i {
+            color: var(--secondary-color);
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .nutrition-item {
+            text-align: center;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .nutrition-value {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .nutrition-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .refresh-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .meal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nutrition-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .hero, .action-buttons, .refresh-btn {
+                display: none;
+            }
+
+            .meal-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+                margin-bottom: 20px;
+                padding: 20px;
+                background: white;
+                box-shadow: none;
+            }
+
+            .meal-header {
+                border-bottom: 2px solid #2C3E50;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+
+            .meal-title {
+                font-size: 24px;
+                color: #2C3E50;
+                margin: 0;
+            }
+
+            .meal-subtitle {
+                font-size: 18px;
+                color: #3498DB;
+                margin: 5px 0;
+            }
+
+            .meal-content {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ingredients-list {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            .ingredient-item {
+                margin-bottom: 5px;
+                padding-bottom: 5px;
+                border-bottom: 1px solid #eee;
+            }
+
+            .ingredient-item:last-child {
+                border-bottom: none;
+            }
+
+            .nutrition-info {
+                margin-top: 15px;
+                padding-top: 15px;
+                border-top: 1px solid #eee;
+            }
+
+            .pdf-header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #2C3E50;
+            }
+
+            .pdf-header h1 {
+                font-size: 28px;
+                color: #2C3E50;
+                margin-bottom: 10px;
+            }
+
+            .pdf-header p {
+                font-size: 16px;
+                color: #666;
+                margin: 5px 0;
+            }
+
+            .pdf-footer {
+                text-align: center;
+                margin-top: 30px;
+                padding-top: 20px;
+                border-top: 2px solid #2C3E50;
+                font-size: 12px;
+                color: #666;
+            }
+
+            @page {
+                margin: 1cm;
+                size: A4;
+            }
+        }
+
+        /* Enhanced User Experience Styles */
+        .meal-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .meal-type {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Your Meal Plan</h1>
+        <p>Nutritious and Delicious Options for Your Goals</p>
+    </div>
+
+    <div class="container">
+        <div class="action-buttons">
+            <a href="workout.html" class="btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Workout
+            </a>
+            <button class="btn" onclick="generatePDF()">
+                <i class="fas fa-file-pdf"></i>
+                Save as PDF
+            </button>
+            <a href="index.html" class="btn">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="meals.html" class="nav-tab active">
+                <i class="fas fa-utensils"></i>
+                Meal Plan
+            </a>
+            <a href="workout.html" class="nav-tab">
+                <i class="fas fa-dumbbell"></i>
+                Workout Plan
+            </a>
+        </div>
+
+        <div class="meal-grid" id="mealGrid">
+            <!-- Meals will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        // Meal database
+        const meals = {
+            breakfast: [
+                {
+                    name: "Protein Overnight Oats",
+                    subtitle: "High-protein breakfast bowl",
+                    ingredients: [
+                        "1 cup rolled oats",
+                        "1 scoop protein powder",
+                        "1 cup almond milk",
+                        "1 tbsp chia seeds",
+                        "1 tbsp honey",
+                        "Fresh berries"
+                    ],
+                    nutrition: {
+                        calories: 450,
+                        protein: 25,
+                        carbs: 55,
+                        fat: 15
+                    }
+                },
+                {
+                    name: "Egg and Avocado Toast",
+                    subtitle: "Healthy fats and protein",
+                    ingredients: [
+                        "2 whole eggs",
+                        "1 avocado",
+                        "2 slices whole grain bread",
+                        "Cherry tomatoes",
+                        "Fresh spinach",
+                        "Salt and pepper"
+                    ],
+                    nutrition: {
+                        calories: 380,
+                        protein: 18,
+                        carbs: 35,
+                        fat: 22
+                    }
+                },
+                {
+                    name: "Greek Yogurt Parfait",
+                    subtitle: "Protein-rich breakfast",
+                    ingredients: [
+                        "1 cup Greek yogurt",
+                        "1/2 cup granola",
+                        "Mixed berries",
+                        "1 tbsp honey",
+                        "Almonds",
+                        "Chia seeds"
+                    ],
+                    nutrition: {
+                        calories: 420,
+                        protein: 22,
+                        carbs: 45,
+                        fat: 18
+                    }
+                }
+            ],
+            lunch: [
+                {
+                    name: "Quinoa Buddha Bowl",
+                    subtitle: "Nutrient-dense lunch bowl",
+                    ingredients: [
+                        "1 cup quinoa",
+                        "1 cup chickpeas",
+                        "Mixed vegetables",
+                        "Feta cheese",
+                        "Olive oil",
+                        "Lemon dressing"
+                    ],
+                    nutrition: {
+                        calories: 550,
+                        protein: 20,
+                        carbs: 65,
+                        fat: 25
+                    }
+                },
+                {
+                    name: "Grilled Chicken Salad",
+                    subtitle: "High-protein lunch",
+                    ingredients: [
+                        "200g chicken breast",
+                        "Mixed greens",
+                        "Cherry tomatoes",
+                        "Cucumber",
+                        "Olive oil",
+                        "Balsamic vinegar"
+                    ],
+                    nutrition: {
+                        calories: 480,
+                        protein: 35,
+                        carbs: 25,
+                        fat: 28
+                    }
+                },
+                {
+                    name: "Tuna Wrap",
+                    subtitle: "Quick and healthy lunch",
+                    ingredients: [
+                        "1 can tuna",
+                        "Whole wheat wrap",
+                        "Mixed vegetables",
+                        "Greek yogurt",
+                        "Lettuce",
+                        "Dijon mustard"
+                    ],
+                    nutrition: {
+                        calories: 420,
+                        protein: 28,
+                        carbs: 45,
+                        fat: 18
+                    }
+                }
+            ],
+            dinner: [
+                {
+                    name: "Salmon with Vegetables",
+                    subtitle: "Omega-3 rich dinner",
+                    ingredients: [
+                        "200g salmon fillet",
+                        "Broccoli",
+                        "Sweet potato",
+                        "Olive oil",
+                        "Lemon",
+                        "Herbs"
+                    ],
+                    nutrition: {
+                        calories: 580,
+                        protein: 35,
+                        carbs: 45,
+                        fat: 32
+                    }
+                },
+                {
+                    name: "Turkey Stir-Fry",
+                    subtitle: "High-protein dinner",
+                    ingredients: [
+                        "200g turkey breast",
+                        "Mixed vegetables",
+                        "Brown rice",
+                        "Soy sauce",
+                        "Ginger",
+                        "Garlic"
+                    ],
+                    nutrition: {
+                        calories: 520,
+                        protein: 32,
+                        carbs: 55,
+                        fat: 18
+                    }
+                },
+                {
+                    name: "Vegetarian Buddha Bowl",
+                    subtitle: "Plant-based dinner",
+                    ingredients: [
+                        "1 cup brown rice",
+                        "Tofu",
+                        "Mixed vegetables",
+                        "Tahini sauce",
+                        "Nuts",
+                        "Seeds"
+                    ],
+                    nutrition: {
+                        calories: 550,
+                        protein: 22,
+                        carbs: 65,
+                        fat: 25
+                    }
+                }
+            ],
+            snacks: [
+                {
+                    name: "Protein Smoothie Bowl",
+                    subtitle: "Post-workout snack",
+                    ingredients: [
+                        "1 scoop protein powder",
+                        "Banana",
+                        "Mixed berries",
+                        "Almond milk",
+                        "Chia seeds",
+                        "Granola"
+                    ],
+                    nutrition: {
+                        calories: 380,
+                        protein: 25,
+                        carbs: 45,
+                        fat: 12
+                    }
+                },
+                {
+                    name: "Greek Yogurt with Nuts",
+                    subtitle: "Protein-rich snack",
+                    ingredients: [
+                        "1 cup Greek yogurt",
+                        "Mixed nuts",
+                        "Honey",
+                        "Cinnamon",
+                        "Fresh fruit",
+                        "Chia seeds"
+                    ],
+                    nutrition: {
+                        calories: 320,
+                        protein: 20,
+                        carbs: 25,
+                        fat: 18
+                    }
+                },
+                {
+                    name: "Hummus and Vegetables",
+                    subtitle: "Healthy snack plate",
+                    ingredients: [
+                        "1/2 cup hummus",
+                        "Mixed vegetables",
+                        "Whole grain crackers",
+                        "Olive oil",
+                        "Paprika",
+                        "Fresh herbs"
+                    ],
+                    nutrition: {
+                        calories: 280,
+                        protein: 12,
+                        carbs: 35,
+                        fat: 15
+                    }
+                }
+            ]
+        };
+
+        let currentMeals = {
+            breakfast: null,
+            lunch: null,
+            dinner: null,
+            snacks: null
+        };
+
+        // Get random meal from array
+        function getRandomMeal(mealArray) {
+            return mealArray[Math.floor(Math.random() * mealArray.length)];
+        }
+
+        // Generate meal plan
+        function generateMealPlan() {
+            Object.keys(meals).forEach(mealType => {
+                currentMeals[mealType] = getRandomMeal(meals[mealType]);
+            });
+            displayMeals();
+        }
+
+        // Create meal card HTML
+        function createMealCard(mealType, meal) {
+            const userData = JSON.parse(localStorage.getItem('fitnessData'));
+            const mealImages = {
+                breakfast: [
+                    'https://images.unsplash.com/photo-1493778168164-3de2f0134ed9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Overnight oats
+                    'https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Avocado toast
+                    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'  // Yogurt parfait
+                ],
+                lunch: [
+                    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Buddha bowl
+                    'https://images.unsplash.com/photo-1547496502-affa22d38842?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Chicken salad
+                    'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'  // Tuna wrap
+                ],
+                dinner: [
+                    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Salmon
+                    'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Stir fry
+                    'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'  // Buddha bowl
+                ],
+                snacks: [
+                    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Smoothie bowl
+                    'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Yogurt with nuts
+                    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'  // Hummus plate
+                ]
+            };
+
+            // Get the index of the current meal in the meals array
+            const mealIndex = meals[mealType].findIndex(m => m.name === meal.name);
+            const imageUrl = mealImages[mealType][mealIndex];
+
+            return `
+                <div class="meal-card">
+                    <img src="${imageUrl}" alt="${meal.name}" class="meal-image" onerror="this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'">
+                    <div class="meal-header">
+                        <h3 class="meal-title">${meal.name}</h3>
+                        <div class="meal-subtitle">${meal.subtitle}</div>
+                    </div>
+                    <div class="meal-content">
+                        <div class="meal-info">
+                            <h3>Ingredients:</h3>
+                            <ul>
+                                ${meal.ingredients.map(ingredient => `
+                                    <li><i class="fas fa-check-circle"></i>${ingredient}</li>
+                                `).join('')}
+                            </ul>
+                            <div class="nutrition-info">
+                                <h4>Nutrition Facts:</h4>
+                                <div class="nutrition-grid">
+                                    <div class="nutrition-item">
+                                        <span class="nutrition-value">${meal.nutrition.calories}</span>
+                                        <span class="nutrition-label">Calories</span>
+                                    </div>
+                                    <div class="nutrition-item">
+                                        <span class="nutrition-value">${meal.nutrition.protein}g</span>
+                                        <span class="nutrition-label">Protein</span>
+                                    </div>
+                                    <div class="nutrition-item">
+                                        <span class="nutrition-value">${meal.nutrition.carbs}g</span>
+                                        <span class="nutrition-label">Carbs</span>
+                                    </div>
+                                    <div class="nutrition-item">
+                                        <span class="nutrition-value">${meal.nutrition.fat}g</span>
+                                        <span class="nutrition-label">Fat</span>
+                                    </div>
+                                </div>
+                                ${userData.targetCalories ? `
+                                    <div class="calorie-info">
+                                        <p>Daily Target: ${userData.targetCalories} calories</p>
+                                        <p>This meal is ${Math.round((meal.nutrition.calories / userData.targetCalories) * 100)}% of your daily target</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <div class="meal-actions">
+                            <button class="refresh-btn" onclick="refreshMeal('${mealType}')">
+                                <i class="fas fa-sync-alt"></i>
+                                Try Another Option
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Display meals
+        function displayMeals() {
+            const mealGrid = document.getElementById('mealGrid');
+            mealGrid.innerHTML = '';
+
+            Object.entries(currentMeals).forEach(([type, meal]) => {
+                mealGrid.innerHTML += createMealCard(type, meal);
+            });
+        }
+
+        // Refresh specific meal
+        function refreshMeal(mealType) {
+            const currentMeal = currentMeals[mealType];
+            let newMeal;
+            do {
+                newMeal = getRandomMeal(meals[mealType]);
+            } while (newMeal === currentMeal);
+            
+            currentMeals[mealType] = newMeal;
+            displayMeals();
+        }
+
+        // Generate PDF
+        function generatePDF() {
+            const element = document.getElementById('mealGrid');
+            const userData = JSON.parse(localStorage.getItem('fitnessData'));
+            
+            // Create header
+            const header = document.createElement('div');
+            header.className = 'pdf-header';
+            header.innerHTML = `
+                <h1>Personalized Meal Plan</h1>
+                <div class="user-info">
+                    <p><strong>Generated for:</strong> ${userData.gender}, ${userData.age} years old</p>
+                    <p><strong>Dietary Preference:</strong> ${userData.dietaryPreference.toUpperCase()}</p>
+                    <p><strong>Fitness Goal:</strong> ${userData.fitnessGoal.replace('-', ' ').toUpperCase()}</p>
+                </div>
+            `;
+            element.insertBefore(header, element.firstChild);
+
+            // Create footer
+            const footer = document.createElement('div');
+            footer.className = 'pdf-footer';
+            footer.innerHTML = `
+                <p><strong>Generated on:</strong> ${new Date().toLocaleDateString()}</p>
+                <p style="margin-top: 1rem; font-style: italic;">Disclaimer: This meal plan is for informational purposes only. Consult with a healthcare professional before starting any diet program.</p>
+            `;
+            element.appendChild(footer);
+
+            const opt = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: 'meal-plan.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                },
+                jsPDF: { 
+                    unit: 'in', 
+                    format: 'letter', 
+                    orientation: 'portrait',
+                    compress: true
+                }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Remove header and footer after PDF generation
+                header.remove();
+                footer.remove();
+            });
+        }
+
+        // Initialize meal plan
+        function initializeMealPlan() {
+            const userData = JSON.parse(localStorage.getItem('fitnessData'));
+            if (!userData) {
+                window.location.href = 'fitness.html';
+                return;
+            }
+
+            generateMealPlan();
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initializeMealPlan);
+    </script>
+</body>
+</html> 

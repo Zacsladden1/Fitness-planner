@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Planner - Workout Plan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #3949ab;
+            --accent-color: #f50057;
+            --text-color: #2C3E50;
+            --text-light: #7F8C8D;
+            --background-color: #f5f5f5;
+            --card-background: #ffffff;
+            --border-color: #e0e0e0;
+            --success-color: #2e7d32;
+            --warning-color: #f57c00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)),
+                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .progress-section {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .progress-card {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .progress-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-details {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .workout-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .workout-card {
+            background: var(--card-background);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .workout-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .workout-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .workout-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .workout-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .workout-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .workout-content {
+            padding: 1.5rem;
+        }
+
+        .workout-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .workout-info h3 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .workout-info h3 i {
+            color: var(--secondary-color);
+        }
+
+        .exercise-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .exercise-item {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            border-color: var(--secondary-color);
+            background: rgba(57, 73, 171, 0.05);
+        }
+
+        .exercise-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .exercise-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 0.8rem;
+        }
+
+        .exercise-detail {
+            background: var(--background-color);
+            padding: 0.8rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .exercise-detail span {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+
+        .exercise-detail strong {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        .workout-notes {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 1.5rem;
+        }
+
+        .workout-notes h4 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .workout-notes h4 i {
+            color: var(--secondary-color);
+        }
+
+        .workout-notes ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .workout-notes li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .workout-notes li::before {
+            content: '•';
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .progress-info {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .progress-info h4 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .progress-info h4 i {
+            color: var(--secondary-color);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .progress-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .workout-log {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--background-color);
+        }
+
+        .workout-log h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .log-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .log-btn {
+            padding: 0.8rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .log-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .calories-burned {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--background-color);
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .calories-burned span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .workout-history {
+            margin-top: 2rem;
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .workout-history h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--background-color);
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .history-item:hover {
+            transform: translateX(5px);
+        }
+
+        .history-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .history-date {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .history-type {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .history-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-stat i {
+            color: var(--primary-color);
+        }
+
+        .delete-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
+
+        .confirm-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .confirm-dialog h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .confirm-dialog p {
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .confirm-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-delete {
+            background: #ff4444;
+            color: white;
+        }
+
+        .confirm-delete:hover {
+            background: #cc0000;
+        }
+
+        .confirm-cancel {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .confirm-cancel:hover {
+            background: #ddd;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .no-workouts {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .week-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .week-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .workout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            .action-buttons,
+            .week-selector {
+                display: none;
+            }
+
+            .workout-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 2rem;
+                border: 1px solid #ddd;
+                box-shadow: none !important;
+            }
+
+            .workout-grid {
+                display: block;
+            }
+
+            .workout-header {
+                background: #f8f8f8 !important;
+                color: #333 !important;
+                border-bottom: 2px solid #4CAF50;
+                padding: 1.5rem !important;
+            }
+
+            .workout-title {
+                color: #4CAF50 !important;
+                font-size: 1.8rem !important;
+                margin-bottom: 0.8rem !important;
+            }
+
+            .workout-subtitle {
+                color: #666 !important;
+                font-size: 1.1rem !important;
+            }
+
+            .workout-content {
+                padding: 1.5rem !important;
+            }
+
+            .workout-exercises h3,
+            .workout-notes h3 {
+                color: #2196F3 !important;
+                border-bottom: 1px solid #2196F3;
+                padding-bottom: 0.5rem;
+                font-size: 1.3rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .workout-exercises li,
+            .workout-notes li {
+                margin-bottom: 0.8rem !important;
+                font-size: 1rem !important;
+                line-height: 1.6 !important;
+            }
+
+            .workout-exercises li i,
+            .workout-notes li i {
+                color: #4CAF50 !important;
+                margin-right: 0.5rem !important;
+            }
+
+            .pdf-header {
+                text-align: center;
+                margin-bottom: 2rem;
+                padding-bottom: 1rem;
+                border-bottom: 2px solid #4CAF50;
+                page-break-after: avoid;
+            }
+
+            .pdf-header h1 {
+                color: #4CAF50;
+                margin-bottom: 0.8rem;
+                font-size: 2.2rem !important;
+            }
+
+            .pdf-header p {
+                color: #2196F3;
+                font-size: 1.3rem !important;
+                margin-bottom: 1rem;
+            }
+
+            .pdf-header .user-info {
+                font-size: 1rem !important;
+                color: #666;
+                line-height: 1.6;
+            }
+
+            .pdf-footer {
+                text-align: center;
+                margin-top: 2rem;
+                padding-top: 1rem;
+                border-top: 2px solid #4CAF50;
+                font-size: 0.9rem;
+                color: #666;
+                page-break-before: avoid;
+            }
+        }
+
+        .week-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .week-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--card-background);
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .week-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .week-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .pdf-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .pdf-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .pdf-header p {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        .pdf-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary-color);
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Your Workout Plan</h1>
+        <p>Push/Pull/Legs Split for Maximum Results</p>
+    </div>
+
+    <div class="container">
+        <div class="action-buttons">
+            <a href="meals.html" class="btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Meal Plan
+            </a>
+            <button class="btn" onclick="generatePDF()">
+                <i class="fas fa-file-pdf"></i>
+                Save as PDF
+            </button>
+            <a href="index.html" class="btn">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
+        </div>
+
+        <div class="week-selector">
+            <button class="week-btn active" onclick="switchWeek('A')">Week A</button>
+            <button class="week-btn" onclick="switchWeek('B')">Week B</button>
+        </div>
+
+        <div id="workoutPlanContent">
+            <div class="workout-grid" id="workoutGrid">
+                <!-- Workouts will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Workout database
+        const workouts = {
+            A: {
+                push: {
+                    name: "Push Day A",
+                    subtitle: "Chest, Shoulders, and Triceps",
+                    exercises: [
+                        "Bench Press (4 sets x 8-12 reps)",
+                        "Overhead Press (4 sets x 8-12 reps)",
+                        "Lateral Raises (4 sets x 12-15 reps)",
+                        "Tricep Pushdowns (3 sets x 12-15 reps)",
+                        "Skull Crushers (3 sets x 12-15 reps)",
+                        "Face Pulls (3 sets x 12-15 reps)"
+                    ]
+                },
+                pull: {
+                    name: "Pull Day A",
+                    subtitle: "Back and Biceps",
+                    exercises: [
+                        "Barbell Rows (4 sets x 8-12 reps)",
+                        "Pull-ups (4 sets x 8-12 reps)",
+                        "Lat Pulldowns (3 sets x 10-12 reps)",
+                        "Bicep Curls (3 sets x 12-15 reps)",
+                        "Hammer Curls (3 sets x 12-15 reps)",
+                        "Face Pulls (3 sets x 12-15 reps)"
+                    ]
+                },
+                legs: {
+                    name: "Legs Day A",
+                    subtitle: "Lower Body Focus",
+                    exercises: [
+                        "Squats (4 sets x 8-12 reps)",
+                        "Romanian Deadlifts (4 sets x 8-12 reps)",
+                        "Leg Press (3 sets x 10-12 reps)",
+                        "Calf Raises (4 sets x 15-20 reps)",
+                        "Leg Extensions (3 sets x 12-15 reps)",
+                        "Leg Curls (3 sets x 12-15 reps)"
+                    ]
+                }
+            },
+            B: {
+                push: {
+                    name: "Push Day B",
+                    subtitle: "Chest, Shoulders, and Triceps",
+                    exercises: [
+                        "Incline Dumbbell Press (4 sets x 8-12 reps)",
+                        "Military Press (4 sets x 8-12 reps)",
+                        "Front Raises (3 sets x 12-15 reps)",
+                        "Tricep Extensions (3 sets x 12-15 reps)",
+                        "Dips (3 sets x 8-12 reps)",
+                        "Shrugs (3 sets x 12-15 reps)"
+                    ]
+                },
+                pull: {
+                    name: "Pull Day B",
+                    subtitle: "Back and Biceps",
+                    exercises: [
+                        "Deadlifts (4 sets x 6-8 reps)",
+                        "Seated Cable Rows (4 sets x 10-12 reps)",
+                        "T-Bar Rows (3 sets x 8-12 reps)",
+                        "Preacher Curls (3 sets x 12-15 reps)",
+                        "Reverse Flyes (3 sets x 12-15 reps)",
+                        "Face Pulls (3 sets x 12-15 reps)"
+                    ]
+                },
+                legs: {
+                    name: "Legs Day B",
+                    subtitle: "Lower Body Focus",
+                    exercises: [
+                        "Front Squats (4 sets x 8-12 reps)",
+                        "Bulgarian Split Squats (4 sets x 10-12 reps each leg)",
+                        "Walking Lunges (3 sets x 20 steps)",
+                        "Seated Calf Raises (3 sets x 15-20 reps)",
+                        "Hip Thrusts (3 sets x 12-15 reps)",
+                        "Hip Abductors (3 sets x 12-15 reps)"
+                    ]
+                }
+            }
+        };
+
+        let currentWeek = 'A';
+
+        // Switch between week A and B
+        function switchWeek(week) {
+            currentWeek = week;
+            const buttons = document.querySelectorAll('.week-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === `Week ${week}`) {
+                    btn.classList.add('active');
+                }
+            });
+            displayWorkouts();
+        }
+
+        // Create workout card HTML
+        function createWorkoutCard(workoutType, workout) {
+            const userData = JSON.parse(localStorage.getItem('fitnessData'));
+
+            // Calculate estimated time to reach goal
+            const weight = parseFloat(userData.weight);
+            const goalWeight = parseFloat(userData.goalWeight);
+            const weightToLose = weight - goalWeight;
+            const calorieDeficits = {
+                slow: 500,
+                moderate: 750,
+                aggressive: 1000
+            };
+            const deficit = calorieDeficits[userData.caloriePreference];
+            
+            // Calculate weeks (1 kg = 7700 calories)
+            const weeks = Math.abs(weightToLose * 7700 / (deficit * 7));
+            
+            // Convert to months and years
+            const months = Math.round(weeks / 4.33);
+            const years = Math.floor(months / 12);
+            const remainingMonths = months % 12;
+
+            let timeText = '';
+            if (years > 0) {
+                timeText = `${years} year${years > 1 ? 's' : ''}`;
+                if (remainingMonths > 0) {
+                    timeText += ` and ${remainingMonths} month${remainingMonths > 1 ? 's' : ''}`;
+                }
+            } else if (months > 0) {
+                timeText = `${months} month${months > 1 ? 's' : ''}`;
+            } else {
+                timeText = `${Math.round(weeks)} week${Math.round(weeks) > 1 ? 's' : ''}`;
+            }
+
+            return `
+                <div class="workout-card">
+                    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="${workout.name}" class="workout-image">
+                    <div class="workout-header">
+                        <h3 class="workout-title">${workout.name}</h3>
+                        <div class="workout-subtitle">${workout.subtitle}</div>
+                    </div>
+                    <div class="workout-content">
+                        <div class="workout-info">
+                            <h3><i class="fas fa-dumbbell"></i> Exercises</h3>
+                            <ul class="exercise-list">
+                                ${workout.exercises.map(exercise => `
+                                    <li class="exercise-item">
+                                        <div class="exercise-name">${exercise}</div>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                        <div class="workout-notes">
+                            <h4><i class="fas fa-info-circle"></i> Notes</h4>
+                            <ul>
+                                <li>Rest 60-90 seconds between sets</li>
+                                <li>Warm up properly before starting</li>
+                                <li>Stay hydrated throughout the workout</li>
+                                <li>Focus on proper form over weight</li>
+                            </ul>
+                        </div>
+                        <div class="progress-info">
+                            <h4><i class="fas fa-chart-line"></i> Progress Tracking</h4>
+                            <div class="progress-grid">
+                                <div class="progress-item">
+                                    <div class="progress-value">${timeText}</div>
+                                    <div class="progress-label">Estimated Time to Goal</div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-value">${userData.targetCalories}</div>
+                                    <div class="progress-label">Daily Calorie Target</div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-value">${workout.exercises.length}</div>
+                                    <div class="progress-label">Total Exercises</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Display workouts
+        function displayWorkouts() {
+            const workoutGrid = document.getElementById('workoutGrid');
+            workoutGrid.innerHTML = '';
+
+            // Display workouts for current week
+            const weekWorkouts = workouts[currentWeek];
+            Object.entries(weekWorkouts).forEach(([type, workout]) => {
+                workoutGrid.innerHTML += createWorkoutCard(type, workout);
+            });
+        }
+
+        // Initialize workout plan
+        function initializeWorkoutPlan() {
+            const userData = JSON.parse(localStorage.getItem('fitnessData'));
+            if (!userData) {
+                window.location.href = 'fitness.html';
+                return;
+            }
+
+            displayWorkouts();
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initializeWorkoutPlan);
+
+        // Generate PDF
+        function generatePDF() {
+            const element = document.getElementById('workoutPlanContent');
+            const userData = JSON.parse(localStorage.getItem('fitnessData'));
+            
+            // Create header
+            const header = document.createElement('div');
+            header.className = 'pdf-header';
+            header.innerHTML = `
+                <h1>Personalized Workout Plan</h1>
+                <p>Week ${currentWeek} - Push/Pull/Legs Split</p>
+                <div class="user-info">
+                    <p><strong>Generated for:</strong> ${userData.gender}, ${userData.age} years old</p>
+                    <p><strong>Fitness Goal:</strong> ${userData.fitnessGoal.replace('-', ' ').toUpperCase()}</p>
+                    <p><strong>Experience Level:</strong> ${userData.experienceLevel.toUpperCase()}</p>
+                    <p><strong>Activity Level:</strong> ${userData.activityLevel.toUpperCase()}</p>
+                </div>
+            `;
+            element.insertBefore(header, element.firstChild);
+
+            // Create footer
+            const footer = document.createElement('div');
+            footer.className = 'pdf-footer';
+            footer.innerHTML = `
+                <p><strong>Generated on:</strong> ${new Date().toLocaleDateString()}</p>
+                <p style="margin-top: 1rem; font-style: italic;">Disclaimer: This workout plan is for informational purposes only. Consult with a healthcare professional before starting any exercise program.</p>
+            `;
+            element.appendChild(footer);
+
+            const opt = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: `workout-plan-week-${currentWeek.toLowerCase()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                },
+                jsPDF: { 
+                    unit: 'in', 
+                    format: 'letter', 
+                    orientation: 'portrait',
+                    compress: true
+                }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Remove header and footer after PDF generation
+                header.remove();
+                footer.remove();
+            });
+        }
+    </script>
+</body>
+</html> 
