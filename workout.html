@@ -35,7 +35,7 @@
 
         .hero {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)),
-                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+                        url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             color: white;
@@ -76,6 +76,57 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .user-stats {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem;
+            background: var(--background-color);
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
         }
 
         .action-buttons {
@@ -632,101 +683,111 @@
         }
 
         @media print {
-            .action-buttons,
-            .week-selector {
+            .action-buttons {
                 display: none;
+            }
+
+            .workout-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-top: 1rem;
             }
 
             .workout-card {
                 break-inside: avoid;
                 page-break-inside: avoid;
-                margin-bottom: 2rem;
+                margin-bottom: 1rem;
                 border: 1px solid #ddd;
                 box-shadow: none !important;
             }
 
-            .workout-grid {
-                display: block;
+            .workout-image {
+                height: 100px !important;
+                object-fit: cover;
             }
 
             .workout-header {
                 background: #f8f8f8 !important;
                 color: #333 !important;
-                border-bottom: 2px solid #4CAF50;
-                padding: 1.5rem !important;
+                border-bottom: 2px solid var(--success-color);
+                padding: 0.5rem !important;
             }
 
             .workout-title {
-                color: #4CAF50 !important;
-                font-size: 1.8rem !important;
-                margin-bottom: 0.8rem !important;
+                color: var(--success-color) !important;
+                font-size: 1.1rem !important;
+                margin-bottom: 0.2rem !important;
             }
 
             .workout-subtitle {
                 color: #666 !important;
-                font-size: 1.1rem !important;
+                font-size: 0.8rem !important;
             }
 
             .workout-content {
-                padding: 1.5rem !important;
+                padding: 0.8rem !important;
             }
 
-            .workout-exercises h3,
-            .workout-notes h3 {
-                color: #2196F3 !important;
-                border-bottom: 1px solid #2196F3;
-                padding-bottom: 0.5rem;
-                font-size: 1.3rem !important;
-                margin-bottom: 1rem !important;
-            }
-
-            .workout-exercises li,
-            .workout-notes li {
-                margin-bottom: 0.8rem !important;
+            .workout-info h3,
+            .workout-notes h4 {
+                color: var(--primary-color) !important;
+                border-bottom: 1px solid var(--primary-color);
+                padding-bottom: 0.2rem;
                 font-size: 1rem !important;
-                line-height: 1.6 !important;
+                margin-bottom: 0.3rem !important;
             }
 
-            .workout-exercises li i,
-            .workout-notes li i {
-                color: #4CAF50 !important;
-                margin-right: 0.5rem !important;
+            .exercise-list {
+                gap: 0.3rem;
+            }
+
+            .exercise-item {
+                padding: 0.3rem !important;
+                margin-bottom: 0.3rem !important;
+                font-size: 0.8rem !important;
+            }
+
+            .exercise-name {
+                font-size: 0.9rem !important;
+            }
+
+            .exercise-details {
+                font-size: 0.7rem !important;
+            }
+
+            .workout-notes ul li {
+                margin-bottom: 0.2rem !important;
+                font-size: 0.8rem !important;
             }
 
             .pdf-header {
-                text-align: center;
-                margin-bottom: 2rem;
-                padding-bottom: 1rem;
-                border-bottom: 2px solid #4CAF50;
-                page-break-after: avoid;
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
             }
 
             .pdf-header h1 {
-                color: #4CAF50;
-                margin-bottom: 0.8rem;
-                font-size: 2.2rem !important;
+                font-size: 1.5rem !important;
+                margin-bottom: 0.2rem !important;
             }
 
             .pdf-header p {
-                color: #2196F3;
-                font-size: 1.3rem !important;
-                margin-bottom: 1rem;
+                font-size: 0.9rem !important;
             }
 
-            .pdf-header .user-info {
-                font-size: 1rem !important;
-                color: #666;
-                line-height: 1.6;
+            .user-info {
+                font-size: 0.8rem !important;
+                margin-top: 0.3rem !important;
+            }
+
+            .user-info p {
+                margin-bottom: 0.2rem !important;
             }
 
             .pdf-footer {
-                text-align: center;
-                margin-top: 2rem;
-                padding-top: 1rem;
-                border-top: 2px solid #4CAF50;
-                font-size: 0.9rem;
-                color: #666;
-                page-break-before: avoid;
+                margin-top: 1rem !important;
+                padding-top: 0.5rem !important;
+                font-size: 0.7rem !important;
             }
         }
 
@@ -793,6 +854,53 @@
     </div>
 
     <div class="container">
+        <div class="user-stats">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-user"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Age</span>
+                        <span class="stat-value" id="userAge">-</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-weight"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Current Weight</span>
+                        <span class="stat-value" id="userWeight">-</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-bullseye"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Goal Weight</span>
+                        <span class="stat-value" id="userGoalWeight">-</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-dumbbell"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Experience</span>
+                        <span class="stat-value" id="userExperience">-</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-running"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Activity Level</span>
+                        <span class="stat-value" id="userActivity">-</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-bullseye"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Fitness Goal</span>
+                        <span class="stat-value" id="userGoal">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="action-buttons">
             <a href="meals.html" class="btn">
                 <i class="fas fa-arrow-left"></i>
@@ -825,78 +933,162 @@
         const workouts = {
             A: {
                 push: {
-                    name: "Push Day A",
-                    subtitle: "Chest, Shoulders, and Triceps",
-                    exercises: [
-                        "Bench Press (4 sets x 8-12 reps)",
-                        "Overhead Press (4 sets x 8-12 reps)",
-                        "Lateral Raises (4 sets x 12-15 reps)",
-                        "Tricep Pushdowns (3 sets x 12-15 reps)",
-                        "Skull Crushers (3 sets x 12-15 reps)",
-                        "Face Pulls (3 sets x 12-15 reps)"
-                    ]
+                    gym: {
+                        name: "Push Day A (Gym)",
+                        subtitle: "Chest, Shoulders, and Triceps",
+                        exercises: [
+                            "Bench Press (4 sets x 8-12 reps)",
+                            "Overhead Press (4 sets x 8-12 reps)",
+                            "Lateral Raises (4 sets x 12-15 reps)",
+                            "Tricep Pushdowns (3 sets x 12-15 reps)",
+                            "Skull Crushers (3 sets x 12-15 reps)",
+                            "Face Pulls (3 sets x 12-15 reps)"
+                        ]
+                    },
+                    home: {
+                        name: "Push Day A (Home)",
+                        subtitle: "Chest, Shoulders, and Triceps",
+                        exercises: [
+                            "Push-ups (4 sets x 8-12 reps)",
+                            "Diamond Push-ups (3 sets x 8-12 reps)",
+                            "Pike Push-ups (3 sets x 8-12 reps)",
+                            "Tricep Dips (3 sets x 12-15 reps)",
+                            "Decline Push-ups (3 sets x 8-12 reps)",
+                            "Wall Push-ups (3 sets x 12-15 reps)"
+                        ]
+                    }
                 },
                 pull: {
-                    name: "Pull Day A",
-                    subtitle: "Back and Biceps",
-                    exercises: [
-                        "Barbell Rows (4 sets x 8-12 reps)",
-                        "Pull-ups (4 sets x 8-12 reps)",
-                        "Lat Pulldowns (3 sets x 10-12 reps)",
-                        "Bicep Curls (3 sets x 12-15 reps)",
-                        "Hammer Curls (3 sets x 12-15 reps)",
-                        "Face Pulls (3 sets x 12-15 reps)"
-                    ]
+                    gym: {
+                        name: "Pull Day A (Gym)",
+                        subtitle: "Back and Biceps",
+                        exercises: [
+                            "Barbell Rows (4 sets x 8-12 reps)",
+                            "Pull-ups (4 sets x 8-12 reps)",
+                            "Lat Pulldowns (3 sets x 10-12 reps)",
+                            "Bicep Curls (3 sets x 12-15 reps)",
+                            "Hammer Curls (3 sets x 12-15 reps)",
+                            "Face Pulls (3 sets x 12-15 reps)"
+                        ]
+                    },
+                    home: {
+                        name: "Pull Day A (Home)",
+                        subtitle: "Back and Biceps",
+                        exercises: [
+                            "Inverted Rows (4 sets x 8-12 reps)",
+                            "Pull-ups (if you have a bar) (4 sets x 8-12 reps)",
+                            "Superman Holds (3 sets x 30-45 seconds)",
+                            "Resistance Band Rows (3 sets x 12-15 reps)",
+                            "Resistance Band Curls (3 sets x 12-15 reps)",
+                            "Plank Rows (3 sets x 12-15 reps each side)"
+                        ]
+                    }
                 },
                 legs: {
-                    name: "Legs Day A",
-                    subtitle: "Lower Body Focus",
-                    exercises: [
-                        "Squats (4 sets x 8-12 reps)",
-                        "Romanian Deadlifts (4 sets x 8-12 reps)",
-                        "Leg Press (3 sets x 10-12 reps)",
-                        "Calf Raises (4 sets x 15-20 reps)",
-                        "Leg Extensions (3 sets x 12-15 reps)",
-                        "Leg Curls (3 sets x 12-15 reps)"
-                    ]
+                    gym: {
+                        name: "Legs Day A (Gym)",
+                        subtitle: "Lower Body Focus",
+                        exercises: [
+                            "Squats (4 sets x 8-12 reps)",
+                            "Romanian Deadlifts (4 sets x 8-12 reps)",
+                            "Leg Press (3 sets x 10-12 reps)",
+                            "Calf Raises (4 sets x 15-20 reps)",
+                            "Leg Extensions (3 sets x 12-15 reps)",
+                            "Leg Curls (3 sets x 12-15 reps)"
+                        ]
+                    },
+                    home: {
+                        name: "Legs Day A (Home)",
+                        subtitle: "Lower Body Focus",
+                        exercises: [
+                            "Bodyweight Squats (4 sets x 12-15 reps)",
+                            "Bulgarian Split Squats (4 sets x 10-12 reps each leg)",
+                            "Walking Lunges (3 sets x 20 steps)",
+                            "Calf Raises (4 sets x 15-20 reps)",
+                            "Jump Squats (3 sets x 12-15 reps)",
+                            "Glute Bridges (3 sets x 12-15 reps)"
+                        ]
+                    }
                 }
             },
             B: {
                 push: {
-                    name: "Push Day B",
-                    subtitle: "Chest, Shoulders, and Triceps",
-                    exercises: [
-                        "Incline Dumbbell Press (4 sets x 8-12 reps)",
-                        "Military Press (4 sets x 8-12 reps)",
-                        "Front Raises (3 sets x 12-15 reps)",
-                        "Tricep Extensions (3 sets x 12-15 reps)",
-                        "Dips (3 sets x 8-12 reps)",
-                        "Shrugs (3 sets x 12-15 reps)"
-                    ]
+                    gym: {
+                        name: "Push Day B (Gym)",
+                        subtitle: "Chest, Shoulders, and Triceps",
+                        exercises: [
+                            "Incline Dumbbell Press (4 sets x 8-12 reps)",
+                            "Military Press (4 sets x 8-12 reps)",
+                            "Front Raises (3 sets x 12-15 reps)",
+                            "Tricep Extensions (3 sets x 12-15 reps)",
+                            "Dips (3 sets x 8-12 reps)",
+                            "Shrugs (3 sets x 12-15 reps)"
+                        ]
+                    },
+                    home: {
+                        name: "Push Day B (Home)",
+                        subtitle: "Chest, Shoulders, and Triceps",
+                        exercises: [
+                            "Wide Push-ups (4 sets x 8-12 reps)",
+                            "Archer Push-ups (3 sets x 8-12 reps)",
+                            "Handstand Push-ups (3 sets x 8-12 reps)",
+                            "Tricep Extensions with Resistance Band (3 sets x 12-15 reps)",
+                            "Pike Push-ups (3 sets x 8-12 reps)",
+                            "Wall Walks (3 sets x 5-8 reps)"
+                        ]
+                    }
                 },
                 pull: {
-                    name: "Pull Day B",
-                    subtitle: "Back and Biceps",
-                    exercises: [
-                        "Deadlifts (4 sets x 6-8 reps)",
-                        "Seated Cable Rows (4 sets x 10-12 reps)",
-                        "T-Bar Rows (3 sets x 8-12 reps)",
-                        "Preacher Curls (3 sets x 12-15 reps)",
-                        "Reverse Flyes (3 sets x 12-15 reps)",
-                        "Face Pulls (3 sets x 12-15 reps)"
-                    ]
+                    gym: {
+                        name: "Pull Day B (Gym)",
+                        subtitle: "Back and Biceps",
+                        exercises: [
+                            "Deadlifts (4 sets x 6-8 reps)",
+                            "Seated Cable Rows (4 sets x 10-12 reps)",
+                            "T-Bar Rows (3 sets x 8-12 reps)",
+                            "Preacher Curls (3 sets x 12-15 reps)",
+                            "Reverse Flyes (3 sets x 12-15 reps)",
+                            "Face Pulls (3 sets x 12-15 reps)"
+                        ]
+                    },
+                    home: {
+                        name: "Pull Day B (Home)",
+                        subtitle: "Back and Biceps",
+                        exercises: [
+                            "Resistance Band Deadlifts (4 sets x 8-12 reps)",
+                            "Resistance Band Rows (4 sets x 10-12 reps)",
+                            "Superman Pulls (3 sets x 12-15 reps)",
+                            "Resistance Band Curls (3 sets x 12-15 reps)",
+                            "Reverse Flyes with Resistance Band (3 sets x 12-15 reps)",
+                            "Plank Pull-throughs (3 sets x 12-15 reps)"
+                        ]
+                    }
                 },
                 legs: {
-                    name: "Legs Day B",
-                    subtitle: "Lower Body Focus",
-                    exercises: [
-                        "Front Squats (4 sets x 8-12 reps)",
-                        "Bulgarian Split Squats (4 sets x 10-12 reps each leg)",
-                        "Walking Lunges (3 sets x 20 steps)",
-                        "Seated Calf Raises (3 sets x 15-20 reps)",
-                        "Hip Thrusts (3 sets x 12-15 reps)",
-                        "Hip Abductors (3 sets x 12-15 reps)"
-                    ]
+                    gym: {
+                        name: "Legs Day B (Gym)",
+                        subtitle: "Lower Body Focus",
+                        exercises: [
+                            "Front Squats (4 sets x 8-12 reps)",
+                            "Bulgarian Split Squats (4 sets x 10-12 reps each leg)",
+                            "Walking Lunges (3 sets x 20 steps)",
+                            "Seated Calf Raises (3 sets x 15-20 reps)",
+                            "Hip Thrusts (3 sets x 12-15 reps)",
+                            "Hip Abductors (3 sets x 12-15 reps)"
+                        ]
+                    },
+                    home: {
+                        name: "Legs Day B (Home)",
+                        subtitle: "Lower Body Focus",
+                        exercises: [
+                            "Jump Squats (4 sets x 12-15 reps)",
+                            "Bulgarian Split Squats (4 sets x 10-12 reps each leg)",
+                            "Walking Lunges (3 sets x 20 steps)",
+                            "Calf Raises (3 sets x 15-20 reps)",
+                            "Single-leg Glute Bridges (3 sets x 12-15 reps each leg)",
+                            "Side Lunges (3 sets x 12-15 reps each leg)"
+                        ]
+                    }
                 }
             }
         };
@@ -918,42 +1110,25 @@
 
         // Create workout card HTML
         function createWorkoutCard(workoutType, workout) {
-            const userData = JSON.parse(localStorage.getItem('fitnessData'));
-
-            // Calculate estimated time to reach goal
-            const weight = parseFloat(userData.weight);
-            const goalWeight = parseFloat(userData.goalWeight);
-            const weightToLose = weight - goalWeight;
-            const calorieDeficits = {
-                slow: 500,
-                moderate: 750,
-                aggressive: 1000
-            };
-            const deficit = calorieDeficits[userData.caloriePreference];
-            
-            // Calculate weeks (1 kg = 7700 calories)
-            const weeks = Math.abs(weightToLose * 7700 / (deficit * 7));
-            
-            // Convert to months and years
-            const months = Math.round(weeks / 4.33);
-            const years = Math.floor(months / 12);
-            const remainingMonths = months % 12;
-
-            let timeText = '';
-            if (years > 0) {
-                timeText = `${years} year${years > 1 ? 's' : ''}`;
-                if (remainingMonths > 0) {
-                    timeText += ` and ${remainingMonths} month${remainingMonths > 1 ? 's' : ''}`;
-                }
-            } else if (months > 0) {
-                timeText = `${months} month${months > 1 ? 's' : ''}`;
-            } else {
-                timeText = `${Math.round(weeks)} week${Math.round(weeks) > 1 ? 's' : ''}`;
+            // Get appropriate image based on workout type
+            let imageUrl;
+            switch(workoutType) {
+                case 'push':
+                    imageUrl = 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+                    break;
+                case 'pull':
+                    imageUrl = 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+                    break;
+                case 'legs':
+                    imageUrl = 'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+                    break;
+                default:
+                    imageUrl = 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
             }
 
             return `
                 <div class="workout-card">
-                    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="${workout.name}" class="workout-image">
+                    <img src="${imageUrl}" alt="${workout.name}" class="workout-image">
                     <div class="workout-header">
                         <h3 class="workout-title">${workout.name}</h3>
                         <div class="workout-subtitle">${workout.subtitle}</div>
@@ -978,23 +1153,6 @@
                                 <li>Focus on proper form over weight</li>
                             </ul>
                         </div>
-                        <div class="progress-info">
-                            <h4><i class="fas fa-chart-line"></i> Progress Tracking</h4>
-                            <div class="progress-grid">
-                                <div class="progress-item">
-                                    <div class="progress-value">${timeText}</div>
-                                    <div class="progress-label">Estimated Time to Goal</div>
-                                </div>
-                                <div class="progress-item">
-                                    <div class="progress-value">${userData.targetCalories}</div>
-                                    <div class="progress-label">Daily Calorie Target</div>
-                                </div>
-                                <div class="progress-item">
-                                    <div class="progress-value">${workout.exercises.length}</div>
-                                    <div class="progress-label">Total Exercises</div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             `;
@@ -1005,10 +1163,15 @@
             const workoutGrid = document.getElementById('workoutGrid');
             workoutGrid.innerHTML = '';
 
+            // Get user's gym access preference
+            const userData = JSON.parse(localStorage.getItem('fitnessData'));
+            const hasGymAccess = userData && userData.gymAccess === 'yes';
+
             // Display workouts for current week
             const weekWorkouts = workouts[currentWeek];
             Object.entries(weekWorkouts).forEach(([type, workout]) => {
-                workoutGrid.innerHTML += createWorkoutCard(type, workout);
+                const workoutData = hasGymAccess ? workout.gym : workout.home;
+                workoutGrid.innerHTML += createWorkoutCard(type, workoutData);
             });
         }
 
@@ -1020,6 +1183,14 @@
                 return;
             }
 
+            // Update user stats
+            document.getElementById('userAge').textContent = `${userData.age} years`;
+            document.getElementById('userWeight').textContent = `${userData.weight} kg`;
+            document.getElementById('userGoalWeight').textContent = `${userData.goalWeight} kg`;
+            document.getElementById('userExperience').textContent = userData.experienceLevel.charAt(0).toUpperCase() + userData.experienceLevel.slice(1);
+            document.getElementById('userActivity').textContent = userData.activityLevel.charAt(0).toUpperCase() + userData.activityLevel.slice(1);
+            document.getElementById('userGoal').textContent = userData.fitnessGoal.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
             displayWorkouts();
         }
 
@@ -1028,55 +1199,131 @@
 
         // Generate PDF
         function generatePDF() {
-            const element = document.getElementById('workoutPlanContent');
             const userData = JSON.parse(localStorage.getItem('fitnessData'));
             
-            // Create header
-            const header = document.createElement('div');
-            header.className = 'pdf-header';
-            header.innerHTML = `
-                <h1>Personalized Workout Plan</h1>
-                <p>Week ${currentWeek} - Push/Pull/Legs Split</p>
-                <div class="user-info">
-                    <p><strong>Generated for:</strong> ${userData.gender}, ${userData.age} years old</p>
-                    <p><strong>Fitness Goal:</strong> ${userData.fitnessGoal.replace('-', ' ').toUpperCase()}</p>
-                    <p><strong>Experience Level:</strong> ${userData.experienceLevel.toUpperCase()}</p>
-                    <p><strong>Activity Level:</strong> ${userData.activityLevel.toUpperCase()}</p>
+            // Create a new div for PDF content
+            const pdfContent = document.createElement('div');
+            pdfContent.style.padding = '20px';
+            pdfContent.style.fontFamily = 'Arial, sans-serif';
+            
+            // Add header with logo and title
+            pdfContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #1a237e; font-size: 24px; margin-bottom: 10px;">Personalized Workout Plan</h1>
+                    <p style="color: #666; font-size: 14px;">Generated for ${userData.name}</p>
                 </div>
             `;
-            element.insertBefore(header, element.firstChild);
 
-            // Create footer
-            const footer = document.createElement('div');
-            footer.className = 'pdf-footer';
-            footer.innerHTML = `
-                <p><strong>Generated on:</strong> ${new Date().toLocaleDateString()}</p>
-                <p style="margin-top: 1rem; font-style: italic;">Disclaimer: This workout plan is for informational purposes only. Consult with a healthcare professional before starting any exercise program.</p>
+            // Add user information in a clean table
+            pdfContent.innerHTML += `
+                <div style="margin-bottom: 30px;">
+                    <h2 style="color: #3949ab; font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #3949ab; padding-bottom: 5px;">User Profile</h2>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; width: 40%;"><strong>Age:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.age} years</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Current Weight:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.weight} kg</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Goal Weight:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.goalWeight} kg</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Fitness Level:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.experienceLevel.charAt(0).toUpperCase() + userData.experienceLevel.slice(1)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Activity Level:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.activityLevel.charAt(0).toUpperCase() + userData.activityLevel.slice(1)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Time to Goal:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.timeToGoal}</td>
+                        </tr>
+                    </table>
+                </div>
             `;
-            element.appendChild(footer);
+
+            // Get user's gym access preference
+            const hasGymAccess = userData && userData.gymAccess === 'yes';
+
+            // Add workout plan section
+            pdfContent.innerHTML += `
+                <div style="margin-bottom: 30px;">
+                    <h2 style="color: #3949ab; font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #3949ab; padding-bottom: 5px;">Week ${currentWeek} Workout Plan</h2>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">${hasGymAccess ? 'Gym-based workout plan' : 'Home-based workout plan'}</p>
+            `;
+
+            // Add each workout type
+            Object.entries(workouts[currentWeek]).forEach(([type, workout]) => {
+                const workoutData = hasGymAccess ? workout.gym : workout.home;
+                pdfContent.innerHTML += `
+                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                        <h3 style="color: #1a237e; font-size: 16px; margin-bottom: 10px;">${workoutData.name}</h3>
+                        <p style="color: #666; font-size: 14px; margin-bottom: 15px;">${workoutData.subtitle}</p>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                            <thead>
+                                <tr style="background-color: #f5f5f5;">
+                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left; font-size: 14px;">Exercise</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: center; font-size: 14px; width: 20%;">Sets</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: center; font-size: 14px; width: 20%;">Reps</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                workoutData.exercises.forEach(exercise => {
+                    const [name, sets] = exercise.split('(');
+                    const [setCount, reps] = sets.replace(')', '').split('x');
+                    pdfContent.innerHTML += `
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-size: 13px;">${name.trim()}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center; font-size: 13px;">${setCount.trim()}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center; font-size: 13px;">${reps.trim()}</td>
+                        </tr>
+                    `;
+                });
+
+                pdfContent.innerHTML += `
+                            </tbody>
+                        </table>
+                        <div style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                            <h4 style="color: #1a237e; font-size: 14px; margin-bottom: 8px;">Important Notes:</h4>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #666;">
+                                <li style="margin-bottom: 4px;">Rest 60-90 seconds between sets</li>
+                                <li style="margin-bottom: 4px;">Warm up properly before starting</li>
+                                <li style="margin-bottom: 4px;">Stay hydrated throughout the workout</li>
+                                <li style="margin-bottom: 4px;">Focus on proper form over weight</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Add footer
+            pdfContent.innerHTML += `
+                <div style="margin-top: 30px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 15px;">
+                    <p style="margin-bottom: 5px;">Generated on: ${new Date().toLocaleDateString()}</p>
+                    <p style="font-style: italic;">Disclaimer: This workout plan is for informational purposes only. Consult with a healthcare professional before starting any exercise program.</p>
+                </div>
+            `;
 
             const opt = {
                 margin: [0.5, 0.5, 0.5, 0.5],
-                filename: `workout-plan-week-${currentWeek.toLowerCase()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    logging: false
-                },
+                filename: 'workout-plan.pdf',
                 jsPDF: { 
                     unit: 'in', 
-                    format: 'letter', 
+                    format: 'a4', 
                     orientation: 'portrait',
-                    compress: true
+                    compress: true,
+                    precision: 2
                 }
             };
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Remove header and footer after PDF generation
-                header.remove();
-                footer.remove();
-            });
+            html2pdf().set(opt).from(pdfContent).save();
         }
     </script>
 </body>

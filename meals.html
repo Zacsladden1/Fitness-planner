@@ -8,16 +8,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --primary-color: #2C3E50;
-            --secondary-color: #3498DB;
-            --accent-color: #E74C3C;
+            --primary-color: #1a237e;
+            --secondary-color: #3949ab;
+            --accent-color: #f50057;
             --text-color: #2C3E50;
             --text-light: #7F8C8D;
-            --background-color: #ECF0F1;
+            --background-color: #f5f5f5;
             --card-background: #ffffff;
-            --border-color: #BDC3C7;
-            --success-color: #27AE60;
-            --warning-color: #F1C40F;
+            --border-color: #e0e0e0;
+            --success-color: #2e7d32;
+            --warning-color: #f57c00;
         }
 
         * {
@@ -35,7 +35,7 @@
 
         .hero {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)),
-                        url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+                        url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             color: white;
@@ -78,45 +78,68 @@
             padding: 2rem;
         }
 
+        .user-stats {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem;
+            background: var(--background-color);
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
         .action-buttons {
             display: flex;
             gap: 1.5rem;
             justify-content: center;
             margin-bottom: 3rem;
             flex-wrap: wrap;
-        }
-
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .nav-tab {
-            padding: 1rem 2rem;
-            background: var(--card-background);
-            border: 2px solid var(--border-color);
-            border-radius: 30px;
-            color: var(--text-color);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-tab:hover {
-            border-color: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
-        .nav-tab.active {
-            background: var(--secondary-color);
-            color: white;
-            border-color: var(--secondary-color);
         }
 
         .btn {
@@ -149,20 +172,25 @@
         }
 
         .meal-card {
-            position: relative;
             background: var(--card-background);
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
             border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
         }
 
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
         .meal-image {
             width: 100%;
-            height: 200px;
+            height: 180px;
             object-fit: cover;
             border-bottom: 2px solid var(--border-color);
         }
@@ -193,20 +221,13 @@
         }
 
         .meal-info {
-            flex: 1;
-        }
-
-        .meal-actions {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
+            margin-bottom: 1rem;
         }
 
         .meal-info h3 {
             color: var(--primary-color);
             font-size: 1.3rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.8rem;
@@ -216,32 +237,40 @@
             color: var(--secondary-color);
         }
 
-        .meal-info ul {
-            list-style: none;
-            padding-left: 1rem;
+        .ingredients-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 0.5rem;
         }
 
-        .meal-info li {
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            color: var(--text-color);
+        .ingredient-item {
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
         }
 
-        .meal-info li i {
-            color: var(--success-color);
-            margin-top: 0.3rem;
+        .ingredient-item:hover {
+            border-color: var(--secondary-color);
+            background: rgba(57, 73, 171, 0.05);
         }
 
-        .nutrition-info {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
+        .ingredient-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .meal-notes {
             background: var(--background-color);
+            padding: 1.5rem;
             border-radius: 15px;
+            margin-top: 1.5rem;
         }
 
-        .nutrition-info h4 {
+        .meal-notes h4 {
             color: var(--primary-color);
             font-size: 1.2rem;
             margin-bottom: 1rem;
@@ -250,56 +279,72 @@
             gap: 0.8rem;
         }
 
-        .nutrition-info h4 i {
+        .meal-notes h4 i {
             color: var(--secondary-color);
         }
 
-        .nutrition-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
+        .meal-notes ul {
+            list-style: none;
+            padding: 0;
         }
 
-        .nutrition-item {
-            text-align: center;
-            padding: 0.8rem;
+        .meal-notes li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .meal-notes li::before {
+            content: '•';
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .calorie-info {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 1.5rem;
+        }
+
+        .calorie-info h4 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .calorie-info h4 i {
+            color: var(--secondary-color);
+        }
+
+        .calorie-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+        }
+
+        .calorie-item {
             background: white;
-            border-radius: 10px;
+            padding: 0.8rem;
+            border-radius: 8px;
+            text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .nutrition-value {
-            display: block;
+        .calorie-value {
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--secondary-color);
             margin-bottom: 0.3rem;
         }
 
-        .nutrition-label {
+        .calorie-label {
             font-size: 0.9rem;
             color: var(--text-light);
-        }
-
-        .refresh-btn {
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .refresh-btn:hover {
-            background: var(--primary-color);
-            transform: translateY(-2px);
         }
 
         @media (max-width: 768px) {
@@ -330,499 +375,387 @@
                 grid-template-columns: 1fr;
             }
 
-            .nutrition-grid {
+            .ingredients-list {
                 grid-template-columns: 1fr;
+            }
+
+            .calorie-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media print {
-            body {
-                background: white;
-                padding: 0;
-                margin: 0;
+            .action-buttons {
+                display: none;
             }
 
-            .hero, .action-buttons, .refresh-btn {
-                display: none;
+            .meal-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-top: 1rem;
             }
 
             .meal-card {
                 break-inside: avoid;
                 page-break-inside: avoid;
+                margin-bottom: 1rem;
                 border: 1px solid #ddd;
-                margin-bottom: 20px;
-                padding: 20px;
-                background: white;
-                box-shadow: none;
+                box-shadow: none !important;
+            }
+
+            .meal-image {
+                height: 100px !important;
+                object-fit: cover;
             }
 
             .meal-header {
-                border-bottom: 2px solid #2C3E50;
-                margin-bottom: 15px;
-                padding-bottom: 10px;
+                background: #f8f8f8 !important;
+                color: #333 !important;
+                border-bottom: 2px solid var(--success-color);
+                padding: 0.5rem !important;
             }
 
             .meal-title {
-                font-size: 24px;
-                color: #2C3E50;
-                margin: 0;
+                color: var(--success-color) !important;
+                font-size: 1.1rem !important;
+                margin-bottom: 0.2rem !important;
             }
 
             .meal-subtitle {
-                font-size: 18px;
-                color: #3498DB;
-                margin: 5px 0;
+                color: #666 !important;
+                font-size: 0.8rem !important;
             }
 
             .meal-content {
-                margin: 0;
-                padding: 0;
+                padding: 0.8rem !important;
+            }
+
+            .meal-info h3,
+            .meal-notes h4 {
+                color: var(--primary-color) !important;
+                border-bottom: 1px solid var(--primary-color);
+                padding-bottom: 0.2rem;
+                font-size: 1rem !important;
+                margin-bottom: 0.3rem !important;
             }
 
             .ingredients-list {
-                margin: 0;
-                padding: 0;
-                list-style: none;
+                grid-template-columns: 1fr;
+                gap: 0.3rem;
             }
 
             .ingredient-item {
-                margin-bottom: 5px;
-                padding-bottom: 5px;
-                border-bottom: 1px solid #eee;
+                padding: 0.3rem !important;
+                margin-bottom: 0.3rem !important;
+                font-size: 0.8rem !important;
             }
 
-            .ingredient-item:last-child {
-                border-bottom: none;
+            .calorie-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.3rem;
             }
 
-            .nutrition-info {
-                margin-top: 15px;
-                padding-top: 15px;
-                border-top: 1px solid #eee;
+            .calorie-item {
+                padding: 0.3rem !important;
+            }
+
+            .calorie-value {
+                font-size: 0.9rem !important;
+            }
+
+            .calorie-label {
+                font-size: 0.7rem !important;
+            }
+
+            .meal-notes ul li {
+                margin-bottom: 0.2rem !important;
+                font-size: 0.8rem !important;
             }
 
             .pdf-header {
-                text-align: center;
-                margin-bottom: 30px;
-                padding-bottom: 20px;
-                border-bottom: 2px solid #2C3E50;
+                margin-bottom: 1rem !important;
+                padding-bottom: 0.5rem !important;
             }
 
             .pdf-header h1 {
-                font-size: 28px;
-                color: #2C3E50;
-                margin-bottom: 10px;
+                font-size: 1.5rem !important;
+                margin-bottom: 0.2rem !important;
             }
 
             .pdf-header p {
-                font-size: 16px;
-                color: #666;
-                margin: 5px 0;
+                font-size: 0.9rem !important;
+            }
+
+            .user-info {
+                font-size: 0.8rem !important;
+                margin-top: 0.3rem !important;
+            }
+
+            .user-info p {
+                margin-bottom: 0.2rem !important;
             }
 
             .pdf-footer {
-                text-align: center;
-                margin-top: 30px;
-                padding-top: 20px;
-                border-top: 2px solid #2C3E50;
-                font-size: 12px;
-                color: #666;
-            }
-
-            @page {
-                margin: 1cm;
-                size: A4;
+                margin-top: 1rem !important;
+                padding-top: 0.5rem !important;
+                font-size: 0.7rem !important;
             }
         }
 
-        /* Enhanced User Experience Styles */
-        .meal-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .pdf-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
         }
 
-        .meal-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        .pdf-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
         }
 
-        .meal-type {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: var(--accent-color);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
+        .pdf-header p {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        .pdf-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary-color);
             font-size: 0.9rem;
-            font-weight: 500;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="hero">
         <h1>Your Meal Plan</h1>
-        <p>Nutritious and Delicious Options for Your Goals</p>
+        <p>Balanced nutrition for your fitness goals</p>
     </div>
 
     <div class="container">
+        <div class="user-stats">
+            <div class="user-info">
+                <h2>Hello, <span id="userName">User</span>!</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-birthday-cake"></i>
+                        <div class="stat-label">Age</div>
+                        <div class="stat-value" id="userAge">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-weight"></i>
+                        <div class="stat-label">Current Weight</div>
+                        <div class="stat-value" id="userWeight">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-bullseye"></i>
+                        <div class="stat-label">Goal Weight</div>
+                        <div class="stat-value" id="userGoalWeight">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-fire"></i>
+                        <div class="stat-label">Daily Calories</div>
+                        <div class="stat-value" id="userCalories">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-leaf"></i>
+                        <div class="stat-label">Dietary Preference</div>
+                        <div class="stat-value" id="userDiet">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-label">Time to Goal</div>
+                        <div class="stat-value" id="userTimeToGoal">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="action-buttons">
-            <a href="workout.html" class="btn">
+            <a href="fitness.html" class="btn">
                 <i class="fas fa-arrow-left"></i>
-                Back to Workout
+                Back to Assessment
             </a>
             <button class="btn" onclick="generatePDF()">
                 <i class="fas fa-file-pdf"></i>
                 Save as PDF
             </button>
+            <a href="workout.html" class="btn">
+                <i class="fas fa-dumbbell"></i>
+                View Workout Plan
+            </a>
             <a href="index.html" class="btn">
                 <i class="fas fa-home"></i>
                 Home
             </a>
         </div>
 
-        <div class="nav-tabs">
-            <a href="meals.html" class="nav-tab active">
-                <i class="fas fa-utensils"></i>
-                Meal Plan
-            </a>
-            <a href="workout.html" class="nav-tab">
-                <i class="fas fa-dumbbell"></i>
-                Workout Plan
-            </a>
-        </div>
-
-        <div class="meal-grid" id="mealGrid">
-            <!-- Meals will be dynamically inserted here -->
+        <div id="mealPlanContent">
+            <div class="meal-grid" id="mealGrid">
+                <!-- Meals will be dynamically inserted here -->
+            </div>
         </div>
     </div>
 
     <script>
         // Meal database
         const meals = {
-            breakfast: [
-                {
-                    name: "Protein Overnight Oats",
-                    subtitle: "High-protein breakfast bowl",
-                    ingredients: [
-                        "1 cup rolled oats",
-                        "1 scoop protein powder",
-                        "1 cup almond milk",
-                        "1 tbsp chia seeds",
-                        "1 tbsp honey",
-                        "Fresh berries"
-                    ],
-                    nutrition: {
-                        calories: 450,
-                        protein: 25,
-                        carbs: 55,
-                        fat: 15
-                    }
-                },
-                {
-                    name: "Egg and Avocado Toast",
-                    subtitle: "Healthy fats and protein",
-                    ingredients: [
-                        "2 whole eggs",
-                        "1 avocado",
-                        "2 slices whole grain bread",
-                        "Cherry tomatoes",
-                        "Fresh spinach",
-                        "Salt and pepper"
-                    ],
-                    nutrition: {
-                        calories: 380,
-                        protein: 18,
-                        carbs: 35,
-                        fat: 22
-                    }
-                },
-                {
-                    name: "Greek Yogurt Parfait",
-                    subtitle: "Protein-rich breakfast",
-                    ingredients: [
-                        "1 cup Greek yogurt",
-                        "1/2 cup granola",
-                        "Mixed berries",
-                        "1 tbsp honey",
-                        "Almonds",
-                        "Chia seeds"
-                    ],
-                    nutrition: {
-                        calories: 420,
-                        protein: 22,
-                        carbs: 45,
-                        fat: 18
-                    }
+            breakfast: {
+                name: "Healthy Breakfast Bowl",
+                subtitle: "Start your day with energy",
+                image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                ingredients: [
+                    "Oatmeal (1 cup)",
+                    "Banana (1 medium)",
+                    "Almonds (1/4 cup)",
+                    "Honey (1 tbsp)",
+                    "Chia seeds (1 tbsp)",
+                    "Cinnamon (1/4 tsp)"
+                ],
+                calories: 450,
+                macros: {
+                    protein: 15,
+                    carbs: 65,
+                    fat: 20
                 }
-            ],
-            lunch: [
-                {
-                    name: "Quinoa Buddha Bowl",
-                    subtitle: "Nutrient-dense lunch bowl",
-                    ingredients: [
-                        "1 cup quinoa",
-                        "1 cup chickpeas",
-                        "Mixed vegetables",
-                        "Feta cheese",
-                        "Olive oil",
-                        "Lemon dressing"
-                    ],
-                    nutrition: {
-                        calories: 550,
-                        protein: 20,
-                        carbs: 65,
-                        fat: 25
-                    }
-                },
-                {
-                    name: "Grilled Chicken Salad",
-                    subtitle: "High-protein lunch",
-                    ingredients: [
-                        "200g chicken breast",
-                        "Mixed greens",
-                        "Cherry tomatoes",
-                        "Cucumber",
-                        "Olive oil",
-                        "Balsamic vinegar"
-                    ],
-                    nutrition: {
-                        calories: 480,
-                        protein: 35,
-                        carbs: 25,
-                        fat: 28
-                    }
-                },
-                {
-                    name: "Tuna Wrap",
-                    subtitle: "Quick and healthy lunch",
-                    ingredients: [
-                        "1 can tuna",
-                        "Whole wheat wrap",
-                        "Mixed vegetables",
-                        "Greek yogurt",
-                        "Lettuce",
-                        "Dijon mustard"
-                    ],
-                    nutrition: {
-                        calories: 420,
-                        protein: 28,
-                        carbs: 45,
-                        fat: 18
-                    }
+            },
+            lunch: {
+                name: "Protein-Rich Lunch Bowl",
+                subtitle: "Balanced midday meal",
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                ingredients: [
+                    "Quinoa (1 cup)",
+                    "Grilled chicken breast (150g)",
+                    "Mixed vegetables (2 cups)",
+                    "Olive oil (1 tbsp)",
+                    "Lemon juice (1 tbsp)",
+                    "Herbs and spices"
+                ],
+                calories: 550,
+                macros: {
+                    protein: 35,
+                    carbs: 45,
+                    fat: 25
                 }
-            ],
-            dinner: [
-                {
-                    name: "Salmon with Vegetables",
-                    subtitle: "Omega-3 rich dinner",
-                    ingredients: [
-                        "200g salmon fillet",
-                        "Broccoli",
-                        "Sweet potato",
-                        "Olive oil",
-                        "Lemon",
-                        "Herbs"
-                    ],
-                    nutrition: {
-                        calories: 580,
-                        protein: 35,
-                        carbs: 45,
-                        fat: 32
-                    }
-                },
-                {
-                    name: "Turkey Stir-Fry",
-                    subtitle: "High-protein dinner",
-                    ingredients: [
-                        "200g turkey breast",
-                        "Mixed vegetables",
-                        "Brown rice",
-                        "Soy sauce",
-                        "Ginger",
-                        "Garlic"
-                    ],
-                    nutrition: {
-                        calories: 520,
-                        protein: 32,
-                        carbs: 55,
-                        fat: 18
-                    }
-                },
-                {
-                    name: "Vegetarian Buddha Bowl",
-                    subtitle: "Plant-based dinner",
-                    ingredients: [
-                        "1 cup brown rice",
-                        "Tofu",
-                        "Mixed vegetables",
-                        "Tahini sauce",
-                        "Nuts",
-                        "Seeds"
-                    ],
-                    nutrition: {
-                        calories: 550,
-                        protein: 22,
-                        carbs: 65,
-                        fat: 25
-                    }
+            },
+            dinner: {
+                name: "Light Dinner Plate",
+                subtitle: "Nutritious evening meal",
+                image: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                ingredients: [
+                    "Salmon fillet (150g)",
+                    "Brown rice (1 cup)",
+                    "Steamed vegetables (2 cups)",
+                    "Olive oil (1 tbsp)",
+                    "Garlic (2 cloves)",
+                    "Fresh herbs"
+                ],
+                calories: 500,
+                macros: {
+                    protein: 30,
+                    carbs: 40,
+                    fat: 25
                 }
-            ],
-            snacks: [
-                {
-                    name: "Protein Smoothie Bowl",
-                    subtitle: "Post-workout snack",
-                    ingredients: [
-                        "1 scoop protein powder",
-                        "Banana",
-                        "Mixed berries",
-                        "Almond milk",
-                        "Chia seeds",
-                        "Granola"
-                    ],
-                    nutrition: {
-                        calories: 380,
-                        protein: 25,
-                        carbs: 45,
-                        fat: 12
-                    }
-                },
-                {
-                    name: "Greek Yogurt with Nuts",
-                    subtitle: "Protein-rich snack",
-                    ingredients: [
-                        "1 cup Greek yogurt",
-                        "Mixed nuts",
-                        "Honey",
-                        "Cinnamon",
-                        "Fresh fruit",
-                        "Chia seeds"
-                    ],
-                    nutrition: {
-                        calories: 320,
-                        protein: 20,
-                        carbs: 25,
-                        fat: 18
-                    }
-                },
-                {
-                    name: "Hummus and Vegetables",
-                    subtitle: "Healthy snack plate",
-                    ingredients: [
-                        "1/2 cup hummus",
-                        "Mixed vegetables",
-                        "Whole grain crackers",
-                        "Olive oil",
-                        "Paprika",
-                        "Fresh herbs"
-                    ],
-                    nutrition: {
-                        calories: 280,
-                        protein: 12,
-                        carbs: 35,
-                        fat: 15
-                    }
+            },
+            snacks: {
+                name: "Healthy Snacks",
+                subtitle: "Energy-boosting options",
+                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                ingredients: [
+                    "Mixed nuts (1/4 cup)",
+                    "Greek yogurt (1 cup)",
+                    "Fresh fruit (1 piece)",
+                    "Protein bar (1 bar)",
+                    "Vegetable sticks (1 cup)",
+                    "Hummus (2 tbsp)"
+                ],
+                calories: 300,
+                macros: {
+                    protein: 15,
+                    carbs: 35,
+                    fat: 15
                 }
-            ]
+            }
         };
 
-        let currentMeals = {
-            breakfast: null,
-            lunch: null,
-            dinner: null,
-            snacks: null
-        };
+        // Initialize meal plan
+        function initializeMealPlan() {
+            const userData = JSON.parse(localStorage.getItem('fitnessData'));
+            if (!userData) {
+                window.location.href = 'fitness.html';
+                return;
+            }
 
-        // Get random meal from array
-        function getRandomMeal(mealArray) {
-            return mealArray[Math.floor(Math.random() * mealArray.length)];
-        }
+            // Update user stats display with stored values
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userAge').textContent = `${userData.age} years`;
+            document.getElementById('userWeight').textContent = `${userData.weight} kg`;
+            document.getElementById('userGoalWeight').textContent = `${userData.goalWeight} kg`;
+            document.getElementById('userCalories').textContent = `${userData.targetCalories} calories`;
+            document.getElementById('userDiet').textContent = userData.dietaryPreference.charAt(0).toUpperCase() + userData.dietaryPreference.slice(1);
+            document.getElementById('userTimeToGoal').textContent = userData.timeToGoal;
 
-        // Generate meal plan
-        function generateMealPlan() {
-            Object.keys(meals).forEach(mealType => {
-                currentMeals[mealType] = getRandomMeal(meals[mealType]);
-            });
             displayMeals();
         }
 
         // Create meal card HTML
         function createMealCard(mealType, meal) {
             const userData = JSON.parse(localStorage.getItem('fitnessData'));
-            const mealImages = {
-                breakfast: [
-                    'https://images.unsplash.com/photo-1493778168164-3de2f0134ed9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Overnight oats
-                    'https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Avocado toast
-                    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'  // Yogurt parfait
-                ],
-                lunch: [
-                    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Buddha bowl
-                    'https://images.unsplash.com/photo-1547496502-affa22d38842?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Chicken salad
-                    'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'  // Tuna wrap
-                ],
-                dinner: [
-                    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Salmon
-                    'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Stir fry
-                    'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'  // Buddha bowl
-                ],
-                snacks: [
-                    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Smoothie bowl
-                    'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80', // Yogurt with nuts
-                    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'  // Hummus plate
-                ]
-            };
-
-            // Get the index of the current meal in the meals array
-            const mealIndex = meals[mealType].findIndex(m => m.name === meal.name);
-            const imageUrl = mealImages[mealType][mealIndex];
+            const dailyCalories = userData.targetCalories;
+            const caloriePercentage = Math.round((meal.calories / dailyCalories) * 100);
 
             return `
                 <div class="meal-card">
-                    <img src="${imageUrl}" alt="${meal.name}" class="meal-image" onerror="this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'">
+                    <img src="${meal.image}" alt="${meal.name}" class="meal-image" onerror="this.src='https://images.unsplash.com/photo-1517838277536-f5f99be501cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'">
                     <div class="meal-header">
                         <h3 class="meal-title">${meal.name}</h3>
                         <div class="meal-subtitle">${meal.subtitle}</div>
                     </div>
                     <div class="meal-content">
                         <div class="meal-info">
-                            <h3>Ingredients:</h3>
-                            <ul>
+                            <h3><i class="fas fa-list"></i> Ingredients</h3>
+                            <ul class="ingredients-list">
                                 ${meal.ingredients.map(ingredient => `
-                                    <li><i class="fas fa-check-circle"></i>${ingredient}</li>
+                                    <li class="ingredient-item">
+                                        <div class="ingredient-name">${ingredient}</div>
+                                    </li>
                                 `).join('')}
                             </ul>
-                            <div class="nutrition-info">
-                                <h4>Nutrition Facts:</h4>
-                                <div class="nutrition-grid">
-                                    <div class="nutrition-item">
-                                        <span class="nutrition-value">${meal.nutrition.calories}</span>
-                                        <span class="nutrition-label">Calories</span>
-                                    </div>
-                                    <div class="nutrition-item">
-                                        <span class="nutrition-value">${meal.nutrition.protein}g</span>
-                                        <span class="nutrition-label">Protein</span>
-                                    </div>
-                                    <div class="nutrition-item">
-                                        <span class="nutrition-value">${meal.nutrition.carbs}g</span>
-                                        <span class="nutrition-label">Carbs</span>
-                                    </div>
-                                    <div class="nutrition-item">
-                                        <span class="nutrition-value">${meal.nutrition.fat}g</span>
-                                        <span class="nutrition-label">Fat</span>
-                                    </div>
+                        </div>
+                        <div class="calorie-info">
+                            <h4><i class="fas fa-fire"></i> Nutritional Information</h4>
+                            <div class="calorie-grid">
+                                <div class="calorie-item">
+                                    <div class="calorie-value">${meal.calories}</div>
+                                    <div class="calorie-label">Calories</div>
+                                    <div class="calorie-label">(${caloriePercentage}% of daily)</div>
                                 </div>
-                                ${userData.targetCalories ? `
-                                    <div class="calorie-info">
-                                        <p>Daily Target: ${userData.targetCalories} calories</p>
-                                        <p>This meal is ${Math.round((meal.nutrition.calories / userData.targetCalories) * 100)}% of your daily target</p>
-                                    </div>
-                                ` : ''}
+                                <div class="calorie-item">
+                                    <div class="calorie-value">${meal.macros.protein}g</div>
+                                    <div class="calorie-label">Protein</div>
+                                </div>
+                                <div class="calorie-item">
+                                    <div class="calorie-value">${meal.macros.carbs}g</div>
+                                    <div class="calorie-label">Carbs</div>
+                                </div>
+                                <div class="calorie-item">
+                                    <div class="calorie-value">${meal.macros.fat}g</div>
+                                    <div class="calorie-label">Fat</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="meal-actions">
-                            <button class="refresh-btn" onclick="refreshMeal('${mealType}')">
-                                <i class="fas fa-sync-alt"></i>
-                                Try Another Option
-                            </button>
+                        <div class="meal-notes">
+                            <h4><i class="fas fa-info-circle"></i> Notes</h4>
+                            <ul>
+                                <li>Adjust portions based on your daily calorie needs</li>
+                                <li>Stay hydrated throughout the day</li>
+                                <li>Consider meal prepping for convenience</li>
+                                <li>Listen to your body's hunger cues</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -834,87 +767,143 @@
             const mealGrid = document.getElementById('mealGrid');
             mealGrid.innerHTML = '';
 
-            Object.entries(currentMeals).forEach(([type, meal]) => {
+            Object.entries(meals).forEach(([type, meal]) => {
                 mealGrid.innerHTML += createMealCard(type, meal);
             });
         }
 
-        // Refresh specific meal
-        function refreshMeal(mealType) {
-            const currentMeal = currentMeals[mealType];
-            let newMeal;
-            do {
-                newMeal = getRandomMeal(meals[mealType]);
-            } while (newMeal === currentMeal);
-            
-            currentMeals[mealType] = newMeal;
-            displayMeals();
-        }
+        // Initialize when page loads
+        window.addEventListener('load', initializeMealPlan);
 
         // Generate PDF
         function generatePDF() {
-            const element = document.getElementById('mealGrid');
             const userData = JSON.parse(localStorage.getItem('fitnessData'));
             
-            // Create header
-            const header = document.createElement('div');
-            header.className = 'pdf-header';
-            header.innerHTML = `
-                <h1>Personalized Meal Plan</h1>
-                <div class="user-info">
-                    <p><strong>Generated for:</strong> ${userData.gender}, ${userData.age} years old</p>
-                    <p><strong>Dietary Preference:</strong> ${userData.dietaryPreference.toUpperCase()}</p>
-                    <p><strong>Fitness Goal:</strong> ${userData.fitnessGoal.replace('-', ' ').toUpperCase()}</p>
+            // Create a new div for PDF content
+            const pdfContent = document.createElement('div');
+            pdfContent.style.padding = '20px';
+            
+            // Add header
+            pdfContent.innerHTML = `
+                <h1 style="text-align: center; color: #1a237e; margin-bottom: 20px;">Personalized Meal Plan</h1>
+                <div style="margin-bottom: 20px;">
+                    <h2 style="color: #3949ab; margin-bottom: 10px;">User Information</h2>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Name:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.name}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Age:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.age} years</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Current Weight:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.weight} kg</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Goal Weight:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.goalWeight} kg</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Daily Calorie Target:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.targetCalories} calories</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Dietary Preference:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.dietaryPreference.charAt(0).toUpperCase() + userData.dietaryPreference.slice(1)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Time to Goal:</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${userData.timeToGoal}</td>
+                        </tr>
+                    </table>
                 </div>
             `;
-            element.insertBefore(header, element.firstChild);
 
-            // Create footer
-            const footer = document.createElement('div');
-            footer.className = 'pdf-footer';
-            footer.innerHTML = `
-                <p><strong>Generated on:</strong> ${new Date().toLocaleDateString()}</p>
-                <p style="margin-top: 1rem; font-style: italic;">Disclaimer: This meal plan is for informational purposes only. Consult with a healthcare professional before starting any diet program.</p>
+            // Add meals table
+            pdfContent.innerHTML += `
+                <h2 style="color: #3949ab; margin-bottom: 10px;">Daily Meal Plan</h2>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr style="background-color: #f5f5f5;">
+                            <th style="padding: 10px; border: 1px solid #ddd;">Meal</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">Calories</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">Protein</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">Carbs</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">Fat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
             `;
-            element.appendChild(footer);
+
+            // Add each meal to the table
+            Object.entries(meals).forEach(([type, meal]) => {
+                const caloriePercentage = Math.round((meal.calories / userData.targetCalories) * 100);
+                pdfContent.innerHTML += `
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            <strong>${meal.name}</strong><br>
+                            <small>${meal.subtitle}</small>
+                        </td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            ${meal.calories} (${caloriePercentage}%)
+                        </td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">${meal.macros.protein}g</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">${meal.macros.carbs}g</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">${meal.macros.fat}g</td>
+                    </tr>
+                `;
+            });
+
+            pdfContent.innerHTML += `
+                    </tbody>
+                </table>
+                <h2 style="color: #3949ab; margin-bottom: 10px;">Ingredients</h2>
+            `;
+
+            // Add ingredients table
+            Object.entries(meals).forEach(([type, meal]) => {
+                pdfContent.innerHTML += `
+                    <h3 style="color: #1a237e; margin: 15px 0 10px;">${meal.name}</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <tbody>
+                `;
+                meal.ingredients.forEach(ingredient => {
+                    pdfContent.innerHTML += `
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${ingredient}</td>
+                        </tr>
+                    `;
+                });
+                pdfContent.innerHTML += `
+                        </tbody>
+                    </table>
+                `;
+            });
+
+            // Add footer
+            pdfContent.innerHTML += `
+                <div style="margin-top: 30px; text-align: center; font-size: 12px; color: #666;">
+                    <p>Generated on: ${new Date().toLocaleDateString()}</p>
+                    <p style="font-style: italic;">Disclaimer: This meal plan is for informational purposes only. Consult with a healthcare professional before starting any diet program.</p>
+                </div>
+            `;
 
             const opt = {
                 margin: [0.5, 0.5, 0.5, 0.5],
                 filename: 'meal-plan.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    logging: false
-                },
                 jsPDF: { 
                     unit: 'in', 
-                    format: 'letter', 
+                    format: 'a4', 
                     orientation: 'portrait',
-                    compress: true
+                    compress: true,
+                    precision: 2
                 }
             };
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Remove header and footer after PDF generation
-                header.remove();
-                footer.remove();
-            });
+            html2pdf().set(opt).from(pdfContent).save();
         }
-
-        // Initialize meal plan
-        function initializeMealPlan() {
-            const userData = JSON.parse(localStorage.getItem('fitnessData'));
-            if (!userData) {
-                window.location.href = 'fitness.html';
-                return;
-            }
-
-            generateMealPlan();
-        }
-
-        // Initialize when page loads
-        window.addEventListener('load', initializeMealPlan);
     </script>
 </body>
 </html> 

@@ -361,6 +361,22 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .calorie-preference.error {
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .calorie-preference.error::before {
+            content: '⚠️ Please select a calorie adjustment preference';
+            display: block;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-align: center;
         }
 
         .calorie-option {
@@ -371,6 +387,7 @@
             transition: all 0.3s ease;
             text-align: center;
             background: white;
+            position: relative;
         }
 
         .calorie-option:hover {
@@ -382,6 +399,21 @@
         .calorie-option.selected {
             border-color: var(--success-color);
             background: rgba(46, 125, 50, 0.1);
+        }
+
+        .calorie-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--success-color);
+            font-size: 1.2rem;
+        }
+
+        .required {
+            color: var(--accent-color);
+            margin-left: 4px;
+            font-size: 1.2rem;
         }
 
         .calorie-option h4 {
@@ -425,6 +457,13 @@
                 <h2><i class="fas fa-user"></i> Personal Information</h2>
                 <div class="form-section-content">
                     <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required minlength="2" maxlength="50">
+                        <i class="fas fa-user"></i>
+                        <div class="help-text">Enter your name</div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="age">Age</label>
                         <input type="number" id="age" name="age" required min="16" max="100">
                         <i class="fas fa-birthday-cake"></i>
@@ -464,7 +503,7 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Calorie Adjustment Preference</label>
+                        <label>Calorie Adjustment Preference <span class="required">*</span></label>
                         <div class="calorie-preference">
                             <div class="calorie-option" onclick="selectCalorieOption('slow')">
                                 <h4>Slow & Steady</h4>
@@ -494,6 +533,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="help-text">Please select one of the options above to continue</div>
                         <input type="hidden" id="caloriePreference" name="caloriePreference" required>
                     </div>
                 </div>
@@ -619,11 +659,29 @@
             options.forEach(opt => opt.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
             document.getElementById('caloriePreference').value = option;
+            
+            // Remove error class when an option is selected
+            const caloriePreferenceContainer = document.querySelector('.calorie-preference');
+            caloriePreferenceContainer.classList.remove('error');
         }
 
         // Update form submission to include new fields
         function handleSubmit(event) {
             event.preventDefault();
+            
+            // Check if calorie preference is selected
+            const caloriePreference = document.getElementById('caloriePreference').value;
+            const caloriePreferenceContainer = document.querySelector('.calorie-preference');
+            
+            if (!caloriePreference) {
+                caloriePreferenceContainer.classList.add('error');
+                // Scroll to the calorie preference section
+                caloriePreferenceContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            }
+            
+            // Remove error class if it was added
+            caloriePreferenceContainer.classList.remove('error');
             
             // Validate form
             const form = document.getElementById('fitnessForm');
@@ -632,13 +690,14 @@
                 return false;
             }
             
-            // Get form data
+            // Get form data and ensure all values are properly parsed
             const formData = {
-                age: document.getElementById('age').value,
+                name: document.getElementById('name').value,
+                age: parseInt(document.getElementById('age').value),
                 gender: document.getElementById('gender').value,
-                weight: document.getElementById('weight').value,
-                goalWeight: document.getElementById('goalWeight').value,
-                height: document.getElementById('height').value,
+                weight: parseFloat(document.getElementById('weight').value),
+                goalWeight: parseFloat(document.getElementById('goalWeight').value),
+                height: parseFloat(document.getElementById('height').value),
                 activityLevel: document.getElementById('activityLevel').value,
                 fitnessGoal: document.getElementById('fitnessGoal').value,
                 experienceLevel: document.getElementById('experienceLevel').value,
@@ -648,15 +707,11 @@
             };
 
             // Calculate BMR using Mifflin-St Jeor Equation
-            const weight = parseFloat(formData.weight);
-            const height = parseFloat(formData.height);
-            const age = parseInt(formData.age);
             let bmr;
-            
             if (formData.gender === 'male') {
-                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+                bmr = (10 * formData.weight) + (6.25 * formData.height) - (5 * formData.age) + 5;
             } else {
-                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+                bmr = (10 * formData.weight) - (6.25 * formData.height) - (5 * formData.age) - 161;
             }
 
             // Calculate TDEE based on activity level
@@ -680,14 +735,31 @@
             const targetCalories = Math.round(tdee - calorieDeficits[formData.caloriePreference]);
 
             // Calculate estimated time to reach goal
-            const weightToLose = weight - parseFloat(formData.goalWeight);
-            const weeksToGoal = Math.abs(weightToLose / (calorieDeficits[formData.caloriePreference] / 7700));
+            const weightToLose = formData.weight - formData.goalWeight;
+            const weeks = Math.abs(weightToLose * 7700 / (calorieDeficits[formData.caloriePreference] * 7));
+            
+            // Convert to months and years
+            const months = Math.round(weeks / 4.33);
+            const years = Math.floor(months / 12);
+            const remainingMonths = months % 12;
+
+            let timeText = '';
+            if (years > 0) {
+                timeText = `${years} year${years > 1 ? 's' : ''}`;
+                if (remainingMonths > 0) {
+                    timeText += ` and ${remainingMonths} month${remainingMonths > 1 ? 's' : ''}`;
+                }
+            } else if (months > 0) {
+                timeText = `${months} month${months > 1 ? 's' : ''}`;
+            } else {
+                timeText = `${Math.round(weeks)} week${Math.round(weeks) > 1 ? 's' : ''}`;
+            }
 
             // Add calculations to form data
             formData.bmr = Math.round(bmr);
             formData.tdee = Math.round(tdee);
             formData.targetCalories = targetCalories;
-            formData.estimatedWeeks = Math.round(weeksToGoal);
+            formData.timeToGoal = timeText;
 
             // Store data in localStorage
             localStorage.setItem('fitnessData', JSON.stringify(formData));
@@ -698,7 +770,7 @@
             successMessage.innerHTML = `
                 <i class="fas fa-check-circle"></i>
                 <p>Your information has been saved successfully!</p>
-                <p>Estimated time to reach your goal: ${Math.round(weeksToGoal)} weeks</p>
+                <p>Estimated time to reach your goal: ${timeText}</p>
                 <p>Your daily calorie target: ${targetCalories} calories</p>
             `;
             document.body.appendChild(successMessage);
